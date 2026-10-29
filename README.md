@@ -12,6 +12,16 @@ Português: [LEIAME.md](LEIAME.md)
   <img alt="Exporting video R step by step, CPU seconds per second of video. 15 s segment: starting point 23.1, Video plus NVENC 8.1. Whole video: Video plus NVENC 6.2, layers 1.7, layers plus dedup 1.5." src="figures/r-steps-light.svg">
 </picture>
 
+## Where this is going
+
+The goal is a **GPU rendering engine for Remotion**: you keep writing videos in React, exactly as today, and the export
+runs on the GPU instead of the browser. NVENC alone is not that; Remotion already offers it. The step here is moving the
+video work itself (decode, crop, framing, compositing) out of Chrome and onto the GPU, leaving Chrome only the graphics.
+
+Today that works for one family of videos: footage with crop, position and zoom, plus graphics on top. Two things decide
+whether it becomes a general engine, and both need people outside Konecz: **compatibility** with richer compositions
+and **evidence on other GPUs**. See the [roadmap](#roadmap).
+
 ## How it works
 
 In a Remotion render with footage, React is not the problem. Almost all of the CPU goes to decoding the footage and taking a screenshot of every frame.
@@ -110,6 +120,32 @@ What we add:
 - the framing written in the React component becomes a plan that runs from end to end on the GPU (NVDEC, libplacebo, NVENC);
 - the result is measured against Chrome's render, next to the encoder's noise floor;
 - the CPU numbers and the benchmark are published as open data.
+
+## Roadmap
+
+**Evidence on more hardware.** Every number so far comes from one RTX 5090 on a busy server.
+
+| Hardware | Status |
+|---|---|
+| RTX 5090, Linux | measured (this repository) |
+| RTX 3060, 4060, 4070, 4090 | wanted: run `bench:quick` and send the result |
+| Professional cards (RTX A-series, L4) and cloud T4 | wanted |
+| Laptop GPUs | wanted |
+| AMD and Intel (VA-API) | not supported yet: P2 needs a VA-API path |
+| CPU only | runs (`--device cpu`), as a baseline |
+
+**Compatibility.** What keeps a composition on P1 today, in the order we plan to tackle it:
+
+- [ ] several takes on screen at once (picture-in-picture, grids);
+- [ ] masks, rotation and blur on the footage, done on the GPU;
+- [ ] transitions between takes;
+- [ ] reading the framing plan from any `<Video>` in a composition, without a component written for it;
+- [ ] dedup on Remotion versions after 4.0.536 (ideally through a public hook upstream instead of a patch).
+
+**Method.** A full benchmark run (N≥5, idle machine, 4K), and HyperFrames as one more baseline.
+
+Ideas and results go to [Discussions](https://github.com/konecz/remotion-gpu/discussions); benchmark results to an
+issue with the **Benchmark result** template.
 
 ## Paper
 

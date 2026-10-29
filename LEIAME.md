@@ -14,6 +14,17 @@ English: [README.md](README.md). As figuras estão em inglês; os textos alterna
 
 Segundos de trabalho por segundo de vídeo, em duas janelas de medição: um trecho de 15 s (N=2) e o vídeo inteiro (N=1 e N=4). Compare as barras só dentro da mesma janela.
 
+## Aonde isto quer chegar
+
+O objetivo é um **motor de render na GPU para o Remotion**: você continua escrevendo o vídeo em React, do mesmo jeito,
+e a exportação roda na placa em vez de no navegador. Só o NVENC não é isso; o Remotion já oferece. O passo aqui é tirar
+do Chrome o trabalho de vídeo (decodificar, recortar, enquadrar, compor) e levá-lo para a GPU, deixando no Chrome só
+os gráficos.
+
+Hoje isso funciona para uma família de vídeos: filmagem com recorte, posição e zoom, mais gráficos por cima. Duas coisas
+decidem se vira um motor geral, e as duas precisam de gente de fora da Konecz: **compatibilidade** com composições mais
+ricas e **evidência em outras GPUs**. Veja o [roteiro](#roteiro).
+
 ## Como funciona
 
 Num render do Remotion com vídeo dentro, o React não é o problema. Quase toda a CPU vai para decodificar o vídeo e para capturar cada quadro.
@@ -126,6 +137,32 @@ O que acrescentamos:
 - o enquadramento escrito no componente React vira um plano que roda de ponta a ponta na placa (NVDEC, libplacebo, NVENC);
 - o resultado é medido contra o render do Chrome, ao lado do piso de ruído do codificador;
 - os números de CPU e o benchmark são publicados como dados abertos.
+
+## Roteiro
+
+**Evidência em mais placas.** Todos os números até agora vêm de uma RTX 5090 num servidor ocupado.
+
+| Placa | Situação |
+|---|---|
+| RTX 5090, Linux | medida (este repositório) |
+| RTX 3060, 4060, 4070, 4090 | procurada: rode `bench:quick` e mande o resultado |
+| Placas profissionais (RTX série A, L4) e T4 na nuvem | procuradas |
+| GPUs de notebook | procuradas |
+| AMD e Intel (VA-API) | ainda sem suporte: o P2 precisa de um caminho VA-API |
+| Só CPU | roda (`--device cpu`), como linha de base |
+
+**Compatibilidade.** O que hoje deixa uma composição no P1, na ordem em que pretendemos atacar:
+
+- [ ] vários takes na tela ao mesmo tempo (picture-in-picture, grades);
+- [ ] máscara, rotação e desfoque na filmagem, feitos na GPU;
+- [ ] transições entre takes;
+- [ ] ler o plano de enquadramento de qualquer `<Video>` da composição, sem um componente feito para isso;
+- [ ] dedup em versões do Remotion depois da 4.0.536 (de preferência por um gancho público no próprio Remotion, em vez de remendo).
+
+**Método.** Uma rodada completa do benchmark (N≥5, máquina ociosa, 4K) e o HyperFrames como mais uma linha de base.
+
+Ideias e resultados vão para as [Discussions](https://github.com/konecz/remotion-gpu/discussions); resultado de
+benchmark, numa issue com o modelo **Benchmark result**.
 
 ## Artigo
 
