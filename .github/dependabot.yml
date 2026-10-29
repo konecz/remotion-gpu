@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Remotion is pinned to 4.0.536 on purpose (the dedup patch checks the exact version),
+  # so it is left out; everything else is checked monthly.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: "remotion"
+      - dependency-name: "@remotion/*"
+    groups:
+      dev:
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
