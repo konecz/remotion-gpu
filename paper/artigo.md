@@ -235,6 +235,7 @@ Só nos gráficos (27,74 s com captura PNG), a captura é 71% (85% sem a inicial
 
 - seg375: do início às configurações do P1, CPU −65% (N=2 em cada). Pelas médias: `<Video>` −39%, MP4 direto do Remotion −16%, NVENC no lugar do libx264 −32%.
 - Vídeo inteiro: P1 / P3 = **4,1× em CPU, 2,3× em parede**. O P1 tem N=1 e não foi alternado com P2/P3; as rodadas de P2 e P3 foram alternadas.
+- Uma rodada anterior do P1 no vídeo inteiro, com as mesmas configurações mas com a máquina mais carregada e outros renders sem contenção, gastou 701 s de CPU (175 s de parede). Usamos o valor menor (460 s, que se repete com 460,2 s na versão 1920×1080) para a razão de 4,1× ser a conservadora; com a rodada anterior seria 6,2×.
 - Versão 1920×1080, N=1 cada: P1 460,2 s, P2 114,4 s, P3 101,0 s de CPU.
 - O `dec` ficou em 0% em todas as rodadas do P1: o WebCodecs decodifica em software no Chrome headless.
 
