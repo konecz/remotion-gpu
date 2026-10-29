@@ -1,0 +1,23 @@
+{
+ "date": "2026-10-29",
+ "os": "Ubuntu 26.04.1 LTS",
+ "kernel": "7.0.0-38-generic",
+ "cpu": "AMD Ryzen 7 7700X 8-Core Processor",
+ "cpu_threads": 16,
+ "governor": "performance",
+ "ram_gb": 62,
+ "gpu": "NVIDIA GeForce RTX 5090",
+ "gpu_driver": "595.99.02",
+ "vram_mb": 32607,
+ "vram_used_by_other_services_mb": 21342,
+ "other_gpu_service": "resident LLM inference server (llama-server), ~21 GB VRAM, idle in the pmon sample before each round",
+ "node": "v24.22.0",
+ "remotion": "4.0.536",
+ "chrome_headless_shell": "157.0.8080.0-remotion-v3",
+ "ffmpeg_system": "ffmpeg version 8.0.1-3ubuntu2",
+ "ffmpeg_remotion": "ffmpeg version n7.1",
+ "libplacebo": true,
+ "libvmaf": false,
+ "containment": "systemd-run --user --scope -p CPUQuota=800% nice -n 19 ionice -c 3 (8 of 16 threads)",
+ "background_load": "production web sites, 5 CI virtual machines and other agents; 1-min load average at round start: pilot median 3.94 (max 7.53), quick median 4.54 (max 7.57)"
+}

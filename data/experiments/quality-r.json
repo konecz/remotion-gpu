@@ -1,0 +1,87 @@
+{
+ "description": "Visual equivalence of the layered render against the Remotion render of the same video. SSIM in RGB, each video decoded by its own color tags, frame by frame.",
+ "segment_seg600": {
+  "reference": "Remotion full render (<OffthreadVideo>, JPEG + NVENC)",
+  "ssim_mean": 0.9746,
+  "ssim_min": 0.9647,
+  "noise_floor": 0.9855,
+  "noise_floor_definition": "the reference MP4 against the JPEG frames it was encoded from",
+  "steps": [
+   {
+    "fix": "libplacebo blends in linear light, Chrome in gamma space: tag inputs and output as linear so values are not converted, then retag BT.709",
+    "ssim_before": 0.944,
+    "ssim_after": 0.958
+   },
+   {
+    "fix": "choose the source frame with fps=30:round=up before libplacebo (25 to 30 fps)",
+    "ssim_before": 0.958,
+    "ssim_after": 0.974
+   },
+   {
+    "fix": "bilinear scaling instead of spline36 (rejected)",
+    "ssim_before": 0.974,
+    "ssim_after": 0.949
+   }
+  ]
+ },
+ "whole_video": {
+  "reference": "Remotion <Video> + NVENC render (P1)",
+  "n": 1,
+  "blocks": [
+   {
+    "block": "1 (full screen, punch-in)",
+    "v_mean": 0.968,
+    "v_min": 0.736,
+    "h_mean": 0.973,
+    "h_min": 0.677
+   },
+   {
+    "block": "2 (spring to card, map)",
+    "v_mean": 0.983,
+    "v_min": 0.967,
+    "h_mean": 0.986,
+    "h_min": 0.963
+   },
+   {
+    "block": "3 (full screen, zoom 1.1, punch-in)",
+    "v_mean": 0.968,
+    "v_min": 0.816,
+    "h_mean": 0.974,
+    "h_min": 0.91
+   },
+   {
+    "block": "4 (card, form)",
+    "v_mean": 0.983,
+    "v_min": 0.544,
+    "h_mean": 0.985,
+    "h_min": 0.544
+   },
+   {
+    "block": "5 (card, form, 1.3 s hold after the take ends)",
+    "v_mean": 0.986,
+    "v_min": 0.981,
+    "h_mean": 0.987,
+    "h_min": 0.982
+   },
+   {
+    "block": "6 (full screen, punch-in, lower third)",
+    "v_mean": 0.967,
+    "v_min": 0.744,
+    "h_mean": 0.973,
+    "h_min": 0.68
+   },
+   {
+    "block": "end card (no footage)",
+    "v_mean": 1.0,
+    "v_min": 1.0,
+    "h_mean": 1.0,
+    "h_min": 0.999
+   }
+  ],
+  "ssim_mean_v": 0.978,
+  "ssim_mean_h": 0.981,
+  "low_frames": "Minima are isolated frames (123, 965, 1010, 1960, 1961), each between neighbours at about 0.97: WebCodecs and fps=30:round=up pick a different 25 fps source frame in a few places. Not visible side by side.",
+  "audio": "delay 0 to 0.33 ms, residual -58 to -62 dB per block"
+ },
+ "refactor_regression": "431 of 450 frames byte-identical to the render before the refactor that extracted the plan; the other 19 (animated map) at PSNR >= 75 dB."
+}

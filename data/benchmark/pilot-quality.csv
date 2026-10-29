@@ -1,0 +1,45 @@
+video,video_name,res,kind,path_or_encoder,frames,ssim_mean,ssim_min,ssim_p01,psnr_db
+A,A typography,1080p,noise_floor,libx264 CRF 18 (P0),120,0.98716,0.9849,0.98528,41.55
+A,A typography,1080p,noise_floor,h264_nvenc 12M (P1),120,0.99206,0.98713,0.98721,42.58
+A,A typography,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.99379,0.99264,0.99269,42.6
+A,A typography,1080p,path,P0,120,0.99217,0.99083,0.99087,41.56
+A,A typography,1080p,path,P1,120,0.99198,0.98955,0.98975,39.73
+A,A typography,1080p,path,P2,120,0.98605,0.98356,0.9837,37.65
+B,B presenter,1080p,noise_floor,libx264 CRF 18 (P0),120,0.97607,0.97156,0.97276,40.54
+B,B presenter,1080p,noise_floor,h264_nvenc 12M (P1),120,0.98023,0.97777,0.97797,41.57
+B,B presenter,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.97975,0.97719,0.97746,41.44
+B,B presenter,1080p,path,P0,120,0.97715,0.97247,0.9738,40.54
+B,B presenter,1080p,path,P1,120,0.98104,0.9789,0.97892,42.33
+B,B presenter,1080p,path,P2,120,0.97822,0.97144,0.9716,38.56
+B,B presenter,4k,noise_floor,libx264 CRF 18 (P0),120,0.97983,0.97726,0.97751,42.22
+B,B presenter,4k,noise_floor,h264_nvenc 12M (P1),120,0.97979,0.97744,0.97778,42.14
+B,B presenter,4k,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.98281,0.9807,0.98077,42.96
+B,B presenter,4k,path,P0,120,0.98144,0.97893,0.97911,42.21
+B,B presenter,4k,path,P1,120,0.98112,0.97899,0.97909,42.85
+B,B presenter,4k,path,P2,120,0.98255,0.97818,0.97911,40.29
+C,C multi-video,1080p,noise_floor,libx264 CRF 18 (P0),120,0.97555,0.96824,0.96992,39.75
+C,C multi-video,1080p,noise_floor,h264_nvenc 12M (P1),120,0.98075,0.9798,0.97981,41.06
+C,C multi-video,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.97981,0.97801,0.97819,40.96
+C,C multi-video,1080p,path,P0,120,0.97614,0.96877,0.97055,39.77
+C,C multi-video,1080p,path,P1,120,0.97651,0.97483,0.97485,39.0
+D,D effects,1080p,noise_floor,libx264 CRF 18 (P0),120,0.98619,0.98474,0.98491,42.07
+D,D effects,1080p,noise_floor,h264_nvenc 12M (P1),120,0.98515,0.9825,0.98269,42.37
+D,D effects,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.98633,0.98383,0.98393,42.49
+D,D effects,1080p,path,P0,120,0.98727,0.98596,0.98598,42.06
+D,D effects,1080p,path,P1,120,0.98482,0.98345,0.98348,39.95
+D,D effects,1080p,path,P2,120,0.98459,0.98199,0.98202,39.53
+E,E slide,1080p,noise_floor,libx264 CRF 18 (P0),120,0.99932,0.99908,0.99908,46.6
+E,E slide,1080p,noise_floor,h264_nvenc 12M (P1),120,0.99949,0.99935,0.99936,47.16
+E,E slide,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.9995,0.99938,0.99938,47.15
+E,E slide,1080p,path,P0,120,0.99941,0.99923,0.99924,46.65
+E,E slide,1080p,path,P1,120,0.99952,0.99939,0.9994,47.16
+E,E slide,1080p,path,P2,120,0.99912,0.99877,0.99878,45.66
+R,R production video,1080p,noise_floor,libx264 CRF 18 (P0),120,0.98186,0.97449,0.97517,41.4
+R,R production video,1080p,noise_floor,h264_nvenc 12M (P1),120,0.98548,0.9802,0.98093,42.59
+R,R production video,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.98528,0.9808,0.98112,42.46
+R,R production video,1080p,path,P1,120,0.98556,0.98031,0.9811,42.55
+R,R production video,1080p,path,P2,120,0.98299,0.95784,0.9767,40.02
+S,S second production video,1080p,noise_floor,libx264 CRF 18 (P0),120,0.96816,0.96291,0.96397,41.93
+S,S second production video,1080p,noise_floor,h264_nvenc 12M (P1),120,0.97231,0.96991,0.97,42.95
+S,S second production video,1080p,noise_floor,h264_nvenc CQ 19 p7 (P2),120,0.97159,0.9691,0.96911,42.83
+S,S second production video,1080p,path,P0,120,0.96786,0.963,0.96366,41.85

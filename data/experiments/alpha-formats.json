@@ -1,0 +1,45 @@
+{
+ "description": "Format of the graphics layer with alpha, 450 frames (seg600). Encode cost is on top of the PNG capture that Chrome already does.",
+ "n": 2,
+ "rows": [
+  {
+   "format": "PNG sequence (chosen)",
+   "encode_cpu_s": 0,
+   "decode_cpu_s": 3.6,
+   "size_mb": 52,
+   "runs_decode_cpu_s": [
+    3.1,
+    4.0
+   ]
+  },
+  {
+   "format": "ProRes 4444 (prores_ks)",
+   "encode_cpu_s": 86.8,
+   "decode_cpu_s": 9.7,
+   "size_mb": 147,
+   "runs_encode_cpu_s": [
+    84.3,
+    89.2
+   ],
+   "runs_decode_cpu_s": [
+    9.6,
+    9.8
+   ]
+  },
+  {
+   "format": "VP9 with alpha (libvpx, realtime)",
+   "encode_cpu_s": 20.0,
+   "decode_cpu_s": 1.2,
+   "size_mb": 2.7,
+   "runs_encode_cpu_s": [
+    20.1,
+    19.8
+   ],
+   "runs_decode_cpu_s": [
+    1.2,
+    1.2
+   ],
+   "note": "lossy on text"
+  }
+ ]
+}

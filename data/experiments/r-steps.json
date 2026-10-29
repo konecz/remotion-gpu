@@ -1,0 +1,183 @@
+{
+ "description": "CPU and wall time of exporting video R at each optimization step. Two measurement windows: the first two steps were measured on a 15 s segment, the last three on the whole video. Do not divide numbers across windows.",
+ "video_R": "R: 75 s production video, presenter footage plus motion graphics, rendered at 1080x1920 and 1920x1080. Presenter footage is 1920x1080 H.264 at 25 fps.",
+ "metric": "CPU = user+sys of the systemd scope cgroup (includes every Chrome, compositor, ffmpeg and Node child). Wall = monotonic clock from spawn to exit.",
+ "conditions": "nice 19, idle ionice, CPUQuota=800% (8 of 16 threads). Shared server with production sites, CI VMs, other agents and a resident llama-server on the GPU. Rounds alternated between variants where noted.",
+ "windows": [
+  {
+   "id": "seg375",
+   "video": "R, 1080x1920 version",
+   "frames": "375-824",
+   "frame_count": 450,
+   "seconds": 15.0,
+   "content": "end of block 1, block 2 (presenter goes from full screen to a card, map on top), start of block 3"
+  },
+  {
+   "id": "whole",
+   "video": "R, 1080x1920 version",
+   "frames": "0-2240",
+   "frame_count": 2241,
+   "seconds": 74.7
+  }
+ ],
+ "steps": [
+  {
+   "id": "start",
+   "label": "Starting point: <OffthreadVideo>, JPEG sequence on disk, separate ffmpeg h264_nvenc",
+   "window": "seg375",
+   "n": 2,
+   "runs_cpu_s": [
+    317.48,
+    374.55
+   ],
+   "runs_wall_s": [
+    49.22,
+    57.59
+   ],
+   "cpu_s_mean": 346.01,
+   "wall_s_mean": 53.41,
+   "cpu_per_video_s": 23.07,
+   "wall_per_video_s": 3.56,
+   "mem_peak_gb_mean": 6.31,
+   "gpu_dec_mean_pct": 0.3,
+   "note": "Another pair of the same command under heavier load: 292.05 and 418.96 s CPU (mean 355.5, spread 36%)."
+  },
+  {
+   "id": "video-tag",
+   "label": "<Video> from @remotion/media, same JPEG + ffmpeg pipeline",
+   "window": "seg375",
+   "n": 2,
+   "runs_cpu_s": [
+    220.75,
+    198.62
+   ],
+   "runs_wall_s": [
+    60.77,
+    55.22
+   ],
+   "cpu_s_mean": 209.69,
+   "wall_s_mean": 58.0,
+   "cpu_per_video_s": 13.98,
+   "wall_per_video_s": 3.87,
+   "mem_peak_gb_mean": 3.74,
+   "gpu_dec_mean_pct": 0.0
+  },
+  {
+   "id": "video-x264",
+   "label": "<Video> + MP4 straight from Remotion, libx264 (control)",
+   "window": "seg375",
+   "n": 2,
+   "runs_cpu_s": [
+    175.16,
+    178.48
+   ],
+   "runs_wall_s": [
+    33.65,
+    33.77
+   ],
+   "cpu_s_mean": 176.82,
+   "wall_s_mean": 33.71,
+   "cpu_per_video_s": 11.79,
+   "wall_per_video_s": 2.25,
+   "mem_peak_gb_mean": 3.74,
+   "gpu_dec_mean_pct": 0.9
+  },
+  {
+   "id": "video-nvenc",
+   "label": "<Video> + MP4 straight from Remotion, h264_nvenc (--hardware-acceleration=required, 12 Mb/s)",
+   "window": "seg375",
+   "n": 2,
+   "runs_cpu_s": [
+    125.87,
+    116.3
+   ],
+   "runs_wall_s": [
+    30.7,
+    29.01
+   ],
+   "cpu_s_mean": 121.09,
+   "wall_s_mean": 29.86,
+   "cpu_per_video_s": 8.07,
+   "wall_per_video_s": 1.99,
+   "mem_peak_gb_mean": 3.16,
+   "gpu_dec_mean_pct": 0.5,
+   "note": "Same settings through the CLI directly: 119.89 and 110.75 s CPU, 31.03 and 27.07 s wall."
+  },
+  {
+   "id": "video-nvenc-whole",
+   "label": "<Video> + NVENC (P1), whole video, with audio",
+   "window": "whole",
+   "n": 1,
+   "runs_cpu_s": [
+    460.3
+   ],
+   "runs_wall_s": [
+    110.7
+   ],
+   "cpu_s_mean": 460.3,
+   "wall_s_mean": 110.7,
+   "cpu_per_video_s": 6.16,
+   "wall_per_video_s": 1.48,
+   "mem_peak_gb_mean": 3.8,
+   "gpu_dec_mean_pct": 0,
+   "note": "1920x1080 version: 460.2 s CPU, 111.8 s wall (N=1)."
+  },
+  {
+   "id": "layers-whole",
+   "label": "Layers (P2): plan + graphics PNG + ffmpeg on GPU, one command",
+   "window": "whole",
+   "n": 4,
+   "runs_cpu_s": [
+    143.2,
+    131.0,
+    125.7,
+    114.1
+   ],
+   "runs_wall_s": [
+    55.6,
+    54.1,
+    50.3,
+    49.0
+   ],
+   "cpu_s_mean": 128.5,
+   "wall_s_mean": 52.25,
+   "cpu_per_video_s": 1.72,
+   "wall_per_video_s": 0.7,
+   "note": "Rounds alternated with the dedup variant. 1920x1080 version: 114.4 s CPU, 46.9 s wall (N=1)."
+  },
+  {
+   "id": "layers-dedup-whole",
+   "label": "Layers + skip repeated frames (P3)",
+   "window": "whole",
+   "n": 4,
+   "runs_cpu_s": [
+    137.0,
+    104.0,
+    107.5,
+    100.4
+   ],
+   "runs_wall_s": [
+    59.6,
+    44.9,
+    47.6,
+    43.9
+   ],
+   "cpu_s_mean": 112.22,
+   "wall_s_mean": 49.0,
+   "cpu_per_video_s": 1.5,
+   "wall_per_video_s": 0.66,
+   "note": "29% of frames reused (652 of 2241). 1920x1080 version: 101.0 s CPU, 43.1 s wall (N=1)."
+  }
+ ],
+ "derived": {
+  "video_tag_effect_pct": -39,
+  "jpeg_and_audio_pass_removed_pct": -16,
+  "nvenc_vs_libx264_pct": -35,
+  "start_to_video_nvenc_pct": -66,
+  "whole_p1_over_p3_cpu_ratio": 4.1,
+  "whole_p1_over_p3_wall_ratio": 2.26,
+  "whole_p3_vs_p1_cpu_pct": -75.6,
+  "note": "Effect splits are the ones reported in the internal write-up for the 15 s segment: each removes one component from the bundle."
+ },
+ "estimate_not_measured": "Early estimates made before the cgroup measurement existed (for example about 1100 s of CPU for the whole of video R, or about 28 s of CPU per second of video) were projections from watching processes during a loaded render, not measurements. No figure or table uses them."
+}

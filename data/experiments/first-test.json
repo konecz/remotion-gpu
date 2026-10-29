@@ -1,0 +1,21 @@
+{
+ "description": "First feasibility test: one 12.4 s presenter take with a transparent graphics layer on top. Numbers from the internal write-up; raw logs were not kept, and the CPU tool at that time (/usr/bin/time) under-counted child processes of Remotion but not of ffmpeg.",
+ "n": 1,
+ "rows": [
+  {
+   "path": "ffmpeg software (decode, scale, overlay, libx264)",
+   "wall_s": 5.6,
+   "cpu_s": 46.8
+  },
+  {
+   "path": "ffmpeg CUDA (NVDEC, scale_cuda, overlay_cuda, NVENC)",
+   "wall_s": 5.0,
+   "cpu_s": 12.1
+  },
+  {
+   "path": "ffmpeg libplacebo (Vulkan): 9:16 crop with animated zoom + layer, NVENC",
+   "wall_s": 3.7,
+   "cpu_s": 9.4
+  }
+ ]
+}

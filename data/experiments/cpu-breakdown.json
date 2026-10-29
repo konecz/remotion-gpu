@@ -1,0 +1,77 @@
+{
+ "description": "Where the CPU goes when Remotion renders a composition with embedded footage. Measured by rendering the same frames in different modes and subtracting.",
+ "window": {
+  "id": "seg375",
+  "video": "R, 1080x1920 version",
+  "frames": "375-824",
+  "frame_count": 450,
+  "seconds": 15.0,
+  "content": "end of block 1, block 2 (presenter goes from full screen to a card, map on top), start of block 3"
+ },
+ "n": 1,
+ "setup": "renderFrames() through @remotion/renderer 4.0.536, concurrency 4, Chrome with --gl=vulkan, <OffthreadVideo> for the footage. Same containment and cgroup CPU metric as r-steps.json.",
+ "runs": [
+  {
+   "mode": "full composition, JPEG capture (quality 95)",
+   "cpu_s": 183.53,
+   "wall_s": 48.59
+  },
+  {
+   "mode": "full composition, imageFormat none (seek, React, layout, footage decode; no screenshot)",
+   "cpu_s": 107.28,
+   "wall_s": 27.57
+  },
+  {
+   "mode": "graphics only (no footage), PNG capture",
+   "cpu_s": 27.74,
+   "wall_s": 12.77
+  },
+  {
+   "mode": "graphics only, imageFormat none",
+   "cpu_s": 7.98,
+   "wall_s": 3.35
+  },
+  {
+   "mode": "graphics only, imageFormat none, 10 frames (fixed start-up cost)",
+   "cpu_s": 4.41,
+   "wall_s": 1.93
+  },
+  {
+   "mode": "graphics only, dedup prototype (FNV hash of body HTML)",
+   "cpu_s": 21.54,
+   "wall_s": 10.63
+  },
+  {
+   "mode": "graphics only, renderMedia with shared-memory capture + h264_nvenc",
+   "cpu_s": 35.3,
+   "wall_s": 13.68
+  }
+ ],
+ "parts": [
+  {
+   "part": "Frame capture (screenshot + JPEG encode)",
+   "cpu_s": 76.25,
+   "derivation": "183.53 - 107.28"
+  },
+  {
+   "part": "Footage decode and handoff (<OffthreadVideo> compositor)",
+   "cpu_s": 99.3,
+   "derivation": "107.28 - 7.98"
+  },
+  {
+   "part": "React, layout and start-up",
+   "cpu_s": 7.98,
+   "derivation": "graphics only, imageFormat none; of which about 4.41 s is fixed start-up"
+  }
+ ],
+ "derived": {
+  "total_cpu_s": 183.53,
+  "react_layout_share_pct": 4.3,
+  "capture_share_pct": 41.5,
+  "decode_share_pct": 54.1,
+  "react_layout_cpu_ms_per_frame": 8.1,
+  "graphics_layer_capture_share_pct": 71.2,
+  "graphics_layer_capture_share_excluding_startup_pct": 84.7
+ },
+ "caveats": "N=1 per mode. Subtraction assumes the costs add up; Chrome may overlap work. The footage share includes the page work of showing the decoded frame, not just the decoder."
+}

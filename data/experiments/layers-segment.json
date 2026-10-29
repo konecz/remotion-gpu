@@ -1,0 +1,100 @@
+{
+ "description": "Layered render on a second 15 s segment, by stage, against the full Remotion render of the same frames.",
+ "window": {
+  "id": "seg600",
+  "video": "R, 1080x1920 version",
+  "frames": "600-1049",
+  "frame_count": 450,
+  "seconds": 15.0,
+  "content": "end of block 2 (card + map + captions), block 3 (full screen, slow 1.1 zoom, punch-in, lower third), start of block 4 (spring from full screen to card); two block cuts"
+ },
+ "conditions": "Same containment and metric as r-steps.json. Load average 3-4 during the table rounds; one ffmpeg round at load 16 took 13 s CPU instead of 8.5 s and is not in the mean.",
+ "rows": [
+  {
+   "stage": "Remotion full render (<OffthreadVideo>, JPEG + NVENC, no audio)",
+   "n": 3,
+   "runs_cpu_s": [
+    214.2,
+    226.0,
+    225.2
+   ],
+   "cpu_s_mean": 221.8,
+   "wall_s_mean": 36.9,
+   "mem_gb": 6.4,
+   "gpu_sm_enc_dec_pct": [
+    9,
+    2,
+    0
+   ]
+  },
+  {
+   "stage": "Layers: plan",
+   "n": 2,
+   "runs_cpu_s": [
+    0.2,
+    0.2
+   ],
+   "cpu_s_mean": 0.2,
+   "wall_s_mean": 0.1,
+   "mem_gb": 0.06
+  },
+  {
+   "stage": "Layers: graphics (Remotion, PNG with alpha)",
+   "n": 3,
+   "runs_cpu_s": [
+    32.0,
+    32.9,
+    33.0
+   ],
+   "cpu_s_mean": 32.6,
+   "wall_s_mean": 11.0,
+   "mem_gb": 1.1,
+   "gpu_sm_enc_dec_pct": [
+    11,
+    1,
+    0
+   ]
+  },
+  {
+   "stage": "Layers: ffmpeg on GPU, with audio mix",
+   "n": 3,
+   "runs_cpu_s": [
+    8.5,
+    8.7,
+    8.4
+   ],
+   "cpu_s_mean": 8.5,
+   "wall_s_mean": 6.3,
+   "mem_gb": 0.5,
+   "gpu_sm_enc_dec_pct": [
+    11,
+    8,
+    1
+   ]
+  },
+  {
+   "stage": "Layers: total",
+   "cpu_s_mean": 41.3,
+   "wall_s_mean": 17.4
+  }
+ ],
+ "derived": {
+  "cpu_ratio": 5.4,
+  "wall_ratio": 2.1,
+  "png_decode_cpu_s": 3.6
+ },
+ "audio": {
+  "remotion_wav_pass_whole_video": {
+   "n": 2,
+   "runs_cpu_s": [
+    626.1,
+    609.2
+   ],
+   "cpu_s_mean": 617.7,
+   "wall_s_mean": 81.2,
+   "mem_gb": 15.0,
+   "note": "Rendering a WAV with Remotion re-renders the whole composition just to mix voices. In the layered path the ffmpeg mix (adelay + volume + amix) costs a fraction of a second."
+  },
+  "mix_difference": "delay 0 to 0.33 ms (16 samples at 48 kHz), residual -58 to -62 dB after alignment"
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "description": "Approaches that did not work, with the reason. Sources: internal write-ups of 2026-10-29 and the files in this folder.",
+ "items": [
+  {
+   "id": "vaapi-headless",
+   "what": "Hardware decode (NVDEC through VA-API) inside headless Chrome",
+   "result": "GPU process crashes when the decoded frame is handed to compositing; nvidia-smi dec stays at 0%.",
+   "why": "chrome-headless-shell is built without VA-API. Chrome for Testing with nvidia-vaapi-driver 0.0.18 opens the decoder (VideoDecoder.isConfigSupported true only with --gl=angle-egl), but headless Ozone has no native GPU memory buffer (dmabuf) to receive the frame: \"Could not find SharedImageBackingFactory ... MailboxVideoFrameConverter\". Chrome for Testing also lacks the shared-memory capture of Remotion's build.",
+   "measured": null
+  },
+  {
+   "id": "dirty-rects",
+   "what": "Capture only the area that changed",
+   "result": "Slower and not pixel-exact.",
+   "why": "Capture -19 s CPU, but recomposition in Node +32.4 s (vs 8.1 s for ffmpeg decoding full PNGs); Chrome rasterizes differently with a clip (816 of 2241 frames differ inside the clip).",
+   "measured": {
+    "before_cpu_s": 8.1,
+    "after_cpu_s": 32.4,
+    "unit": "recompose vs full-PNG decode"
+   }
+  },
+  {
+   "id": "clipper",
+   "what": "Remotion Experimental.Clipper (prior art, removed in 2024)",
+   "result": "\"did not actually make the render faster, rather slower\" (Remotion issue #4468).",
+   "why": "Same outcome as our dirty-rect prototype.",
+   "measured": null
+  },
+  {
+   "id": "shm-nvenc",
+   "what": "Graphics layer through renderMedia with shared memory + NVENC",
+   "result": "More CPU than a PNG sequence.",
+   "why": "Encoding inside the render pipeline added CPU instead of removing it.",
+   "measured": {
+    "before_cpu_s": 27.7,
+    "after_cpu_s": 35.3
+   }
+  },
+  {
+   "id": "alpha-video",
+   "what": "ProRes 4444 or VP9-alpha for the graphics layer",
+   "result": "More CPU to encode than it saves to decode.",
+   "why": "ProRes +86.8 s and VP9 +20.0 s of encode to save at most 2.4 s of PNG decode.",
+   "measured": {
+    "before_cpu_s": 3.6,
+    "after_cpu_s": 96.5,
+    "unit": "decode PNG vs encode+decode ProRes"
+   }
+  },
+  {
+   "id": "parallel",
+   "what": "Several ffmpeg segments at once",
+   "result": "Less wall time, more CPU.",
+   "why": "2 jobs: wall -28%, CPU +20%. Off by default.",
+   "measured": {
+    "before_cpu_s": 36.9,
+    "after_cpu_s": 44.4
+   }
+  },
+  {
+   "id": "wav",
+   "what": "Remotion WAV render for the audio mix",
+   "result": "Re-renders the whole composition.",
+   "why": "617.7 s CPU and 15 GB for 74.7 s of audio; replaced by an ffmpeg mix.",
+   "measured": {
+    "before_cpu_s": 617.7,
+    "after_cpu_s": null
+   }
+  },
+  {
+   "id": "bilinear",
+   "what": "Bilinear scaling in libplacebo",
+   "result": "Worse match.",
+   "why": "SSIM 0.974 to 0.949 against Chrome; spline36 kept.",
+   "measured": null
+  },
+  {
+   "id": "vulkan-misc",
+   "what": "h264_vulkan encode, Vulkan-to-CUDA hwmap, one concat across decoders",
+   "result": "Failed.",
+   "why": "h264_vulkan failed to encode; hwmap Vulkan to CUDA is not implemented (hwupload=derive_device=cuda works); concat rejects Vulkan frames from different decoders, so one ffmpeg per segment.",
+   "measured": null
+  }
+ ]
+}
