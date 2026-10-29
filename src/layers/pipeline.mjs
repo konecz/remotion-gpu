@@ -117,8 +117,8 @@ export const renderLayered = async (o) => {
 };
 
 /** Bundles a Remotion entry once (`remotion bundle`), so several renders skip webpack. Returns the bundle dir. */
-export const bundleProject = ({ cwd, entry, outDir }) => {
+export const bundleProject = ({ cwd, entry, outDir, extraArgs = [] }) => {
   const { cmd, args } = remotionCommand({ cwd });
-  contained(cmd, [...args, "bundle", entry, `--out-dir=${outDir}`, "--log=error"], { cwd });
+  contained(cmd, [...args, "bundle", entry, `--out-dir=${outDir}`, ...extraArgs, "--log=error"], { cwd });
   return outDir;
 };
