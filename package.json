@@ -31,11 +31,11 @@
     "@remotion/cli": "4.0.536",
     "@remotion/media": "4.0.536",
     "@remotion/renderer": "4.0.536",
-    "@types/react": "19.2.2",
-    "esbuild": "0.28.1",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "@types/react": "19.3.0",
+    "esbuild": "0.28.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "remotion": "4.0.536",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }
