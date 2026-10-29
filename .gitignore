@@ -1,0 +1,13 @@
+node_modules/
+# Render outputs and work folders
+out/
+examples/*/out/
+bench/results/
+*.segments/
+# Generated synthetic footage (make-footage.mjs)
+examples/*/public/footage/
+bench/public/footage/
+# Remotion bundles and caches
+build/
+.remotion/
+*.log

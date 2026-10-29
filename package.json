@@ -1,0 +1,41 @@
+{
+  "name": "remotion-gpu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Render and export Remotion videos on an NVIDIA GPU with the CPU left free: NVENC inside Remotion (P1) or a layered render with NVDEC, libplacebo and NVENC (P2).",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "doctor": "node bin/doctor.mjs",
+    "example:footage": "node examples/presenter/scripts/make-footage.mjs",
+    "example:p1": "node examples/presenter/render.mjs p1",
+    "example:layers": "node examples/presenter/render.mjs layers",
+    "example:compare": "node examples/presenter/render.mjs compare",
+    "bench:smoke": "node bench/run.mjs --smoke",
+    "bench:quick": "node bench/run.mjs --quick",
+    "bench:full": "node bench/run.mjs --full",
+    "bench:analyze": "node bench/analyze.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "@remotion/cli": "4.0.536",
+    "@remotion/media": "4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "remotion": "4.0.536"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.536",
+    "@remotion/media": "4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "@types/react": "19.2.2",
+    "esbuild": "0.28.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.536",
+    "typescript": "5.9.3"
+  }
+}
