@@ -66,10 +66,23 @@ Problems with Remotion itself, or with a Remotion version other than 4.0.536, be
 them worse. The dedup patch failing on another version is expected: it refuses to run on versions it was not tested
 on.
 
+## Questions and ideas
+
+Use [Discussions](https://github.com/konecz/remotion-gpu/discussions): how to use it, a render setup you want to
+share, an idea you want to test before writing code. Issues are for bugs and benchmark results.
+
+## Security
+
+Never report a vulnerability in a public issue. See [SECURITY.md](SECURITY.md).
+
 ## Pull requests
 
-- Open an issue first for anything beyond a small fix.
+- Open an issue or a discussion first for anything beyond a small fix.
+- `main` is protected: changes land through a pull request with the `test` checks green and a maintainer review.
+  CI runs on GitHub-hosted runners; workflows from first-time contributors wait for a maintainer to approve them.
 - Run `npm test` and `npm run typecheck` before sending.
 - A change that claims to make rendering faster needs numbers: `src/measure.mjs` (or the benchmark) before and after,
   at least two runs each, and the quality of the output (`src/quality.mjs`).
 - Everything in the repository is in English.
+
+By taking part you agree to the [code of conduct](CODE_OF_CONDUCT.md).

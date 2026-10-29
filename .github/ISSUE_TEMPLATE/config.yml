@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/konecz/remotion-gpu/discussions
+    about: Ask how to use it, share a render setup or propose an idea before writing code.
+  - name: Security vulnerability
+    url: https://github.com/konecz/remotion-gpu/security/advisories/new
+    about: Report it privately. Please do not open a public issue.
