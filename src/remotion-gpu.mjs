@@ -52,6 +52,13 @@ export const remotionCliPath = (fromDir) => {
   return join(req.resolve("@remotion/cli/package.json"), "..", "remotion-cli.js");
 };
 
+/**
+ * Flags that point Remotion at a project folder that has no package.json of its own (as in this repo's examples):
+ * Remotion otherwise takes the nearest package.json as the project root and looks for public/ and the config there.
+ * @param {string} dir project folder with public/ and remotion.config.ts
+ */
+export const projectArgs = (dir) => [`--public-dir=${join(dir, "public")}`, `--config=${join(dir, "remotion.config.ts")}`];
+
 /** Absolute path of the dedup patch (src/dedup/remotion-dedup.cjs). */
 export const DEDUP_PATCH = new URL("./dedup/remotion-dedup.cjs", import.meta.url).pathname;
 
