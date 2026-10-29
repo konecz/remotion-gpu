@@ -146,7 +146,8 @@ export const analyze = (dir) => {
   md.push("## Failures and waiting", "");
   md.push(`- Valid measured runs: ${valid.length}; failed: ${errors.filter((l) => !l.warmup).length}; failed warm-ups: ${errors.filter((l) => l.warmup).length}.`);
   for (const e of errors) md.push(`  - ${e.cell}${e.warmup ? " (warm-up)" : ` r${e.repetition}`}: ${e.error}`);
-  const waits = valid.map((l) => l.wait).filter(Boolean);
+  if (config.wait?.disabled) md.push(`- Quiet-machine wait DISABLED (${config.wait.reason}): these numbers validate the harness and are not measurements.`);
+  const waits = valid.map((l) => l.wait).filter((w) => w && !w.skipped);
   if (waits.length) {
     md.push(
       `- Waiting for a quiet machine: median ${fmt(median(waits.map((e) => e.waitS)))} s, max ${fmt(Math.max(...waits.map((e) => e.waitS)))} s; ` +

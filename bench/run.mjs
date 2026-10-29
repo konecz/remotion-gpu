@@ -13,10 +13,11 @@
 // External project (video "X"): --external <dir> --external-comp <id> [--external-entry src/index.ts]
 //   [--external-start 0] [--external-layers "<command with {output} {from} {to} {work}>"]
 // Quiet-machine wait: --load-max (1-minute load, default threads/2), --busy-max 0.35 (busy CPU 0..1), --wait-max (s).
+// --no-wait skips it. The smoke preset skips it by default: it validates the harness, its numbers are not measurements.
 // Output: bench/results/<date>-<label>/ (runs.jsonl, quality.jsonl, environment-*.json, outputs/, analysis.md,
 // chart.html, submission.json), or --out <dir>.
 import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
-import { availableParallelism } from "node:os";
+import { availableParallelism, loadavg } from "node:os";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { CORES, contained } from "../src/contain.mjs";
@@ -50,6 +51,7 @@ const { values: o } = parseArgs({
     "busy-max": { type: "string", default: "0.35" },
     "wait-max": { type: "string" },
     "no-warmup": { type: "boolean", default: false },
+    "no-wait": { type: "boolean" },
     "no-quality": { type: "boolean", default: false },
     "quality-of": { type: "string" },
     device: { type: "string", default: "nvidia" },
@@ -66,7 +68,7 @@ const { values: o } = parseArgs({
 const previous = o["quality-of"] ? JSON.parse(readFileSync(join(o["quality-of"], "config.json"), "utf8")) : null;
 // Presets. The quick one skips P3 on A and D (every frame changes, nothing to skip) and leaves 4K for the full one.
 const PRESET = o.smoke
-  ? { n: 1, seconds: 4, res: "1080p", warmup: 2, waitMax: 15, label: "smoke" }
+  ? { n: 1, seconds: 4, res: "1080p", warmup: 2, waitMax: 15, noWait: true, label: "smoke" }
   : o.quick
     ? { n: 3, seconds: 15, res: "1080p", skip: "A-1080p-P3,D-1080p-P3", warmup: 4, waitMax: 1200, label: "quick" }
     : o.full
@@ -228,7 +230,9 @@ const config = {
   seconds: SECONDS,
   warmupSeconds: Number(o["warmup-seconds"] ?? PRESET.warmup),
   seed: Number(o.seed),
-  wait: { loadMax: Number(o["load-max"]), busyMax: Number(o["busy-max"]), maxS: Number(o["wait-max"] ?? PRESET.waitMax) },
+  wait: (o["no-wait"] ?? PRESET.noWait)
+    ? { disabled: true, reason: o.smoke ? "smoke preset: validates the harness, not a measurement" : "--no-wait" }
+    : { loadMax: Number(o["load-max"]), busyMax: Number(o["busy-max"]), maxS: Number(o["wait-max"] ?? PRESET.waitMax) },
   cells: cells.map(name),
   paths: PATHS.map(({ id, name: n, description }) => ({ id, name: n, description })),
   resolutions: RESOLUTIONS,
@@ -242,6 +246,7 @@ const config = {
 writeFileSync(join(dir, "config.json"), JSON.stringify(config, null, 2));
 log(`results in ${dir}`);
 log(`${cells.length} cells x ${N} repetitions, ${SECONDS} s each, device ${DEVICE}, CPU ceiling ${CORES} cores`);
+if (config.wait.disabled) log(`quiet-machine wait DISABLED (${config.wait.reason}): runs start under whatever load there is; do not use these numbers as measurements`);
 writeFileSync(join(dir, "environment-start.json"), JSON.stringify(await environment({ projectDir: ROOT, gpu: GPU }), null, 2));
 prepare();
 
@@ -265,7 +270,7 @@ for (let rep = 1; rep <= N; rep++) {
   const order = shuffle(cells, rand);
   log(`repetition ${rep}/${N}: ${order.map(name).join(" ")}`);
   for (const [pos, c] of order.entries()) {
-    const wait = await waitForQuiet({ ...config.wait, log });
+    const wait = config.wait.disabled ? { skipped: true, load1: loadavg()[0] } : await waitForQuiet({ ...config.wait, log });
     try {
       const x = await execute(c, SECONDS, `r${rep}`, { repetition: rep, position: pos, wait });
       record("runs.jsonl", x);
