@@ -16,14 +16,13 @@ Segundos de trabalho por segundo de vídeo, em duas janelas de medição: um tre
 
 ## Aonde isto quer chegar
 
-O objetivo é um **motor de render na GPU para o Remotion**: você continua escrevendo o vídeo em React, do mesmo jeito,
-e a exportação roda na placa em vez de no navegador. Só o NVENC não é isso; o Remotion já oferece. O passo aqui é tirar
-do Chrome o trabalho de vídeo (decodificar, recortar, enquadrar, compor) e levá-lo para a GPU, deixando no Chrome só
-os gráficos.
+O objetivo deste kit é tirar do Chrome o trabalho de vídeo de uma exportação do Remotion (decodificar, recortar,
+enquadrar, compor) e levá-lo para a GPU, deixando no Chrome só os gráficos, enquanto você continua escrevendo o vídeo
+em React do mesmo jeito. Só o NVENC não é isso; o Remotion já oferece.
 
 Hoje isso funciona para uma família de vídeos: filmagem com recorte, posição e zoom, mais gráficos por cima. Duas coisas
-decidem se vira um motor geral, e as duas precisam de gente de fora da Konecz: **compatibilidade** com composições mais
-ricas e **evidência em outras GPUs**. Veja o [roteiro](#roteiro).
+ampliariam isso, e as duas precisam de gente de fora da Konecz: **compatibilidade** com composições mais ricas e
+**evidência em outras GPUs**. Veja o [roteiro](#roteiro).
 
 ## Como funciona
 
@@ -116,7 +115,7 @@ Cada execução grava `bench/results/<execução>/` com as rodadas brutas, o amb
   <img alt="O que não funcionou: decodificar na placa dentro do Chrome sem janela; capturar só a área que mudou; o Experimental.Clipper do Remotion; memória compartilhada com NVENC nos gráficos; ProRes ou VP9 com alfa; vários segmentos do ffmpeg ao mesmo tempo." src="figures/negative-light.svg">
 </picture>
 
-- **Decodificar na placa dentro do Chrome sem janela (VA-API):** o decodificador abre, mas o processo de GPU do Chrome cai ao entregar o quadro, porque o Chrome sem janela não tem dmabuf para recebê-lo. O `dec` da placa fica em 0%.
+- **Decodificar na placa dentro do Chrome sem janela (VA-API):** o decodificador abre, mas o processo de GPU do Chrome cai ao entregar o quadro. O `dec` da placa fica em 0%.
 - **Capturar só a área que mudou:** a captura cai 19 s, mas recompor em Node custa 32,4 s, contra 8,1 s do ffmpeg decodificando os PNG inteiros. Além disso, 816 de 2241 quadros não batem pixel a pixel.
 - **`Experimental.Clipper` do Remotion:** foi removido em 2024 porque deixava o render mais lento. O nosso protótipo chegou ao mesmo resultado.
 - **Gráficos por memória compartilhada + NVENC:** 35,3 s contra 27,7 s da sequência PNG.
