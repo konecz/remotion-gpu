@@ -149,8 +149,8 @@ To try both paths on the bundled example (from `$RGPU`): `npm run example:p1`, `
   output as `color_trc=linear` (so nothing is converted and the blend matches Chrome) and re-tags BT.709 at the
   output. Do not "fix" those tags.
 - **VA-API in headless Chrome does not work.** Do not try to make `<Video>` decode on NVDEC through
-  `nvidia-vaapi-driver`: the decoder opens, but headless Chrome has no native GPU memory buffers to receive the frame
-  and its GPU process crashes. For GPU decode, use P2.
+  `nvidia-vaapi-driver`: the decoder opens, but the GPU process of headless Chrome crashes when the
+  frame arrives. For GPU decode, use P2.
 - **Capturing only the area that changed is slower.** A dirty-rectangle capture (`clip` on the screenshot plus
   recomposing the patches) costs more CPU than it saves and is not pixel-identical (Chrome rasterizes differently with
   a clip). Remotion removed its own `Experimental.Clipper` for the same reason. Use the dedup patch instead.

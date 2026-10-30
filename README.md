@@ -14,13 +14,13 @@ Português: [LEIAME.md](LEIAME.md)
 
 ## Where this is going
 
-The goal is a **GPU rendering engine for Remotion**: you keep writing videos in React, exactly as today, and the export
-runs on the GPU instead of the browser. NVENC alone is not that; Remotion already offers it. The step here is moving the
-video work itself (decode, crop, framing, compositing) out of Chrome and onto the GPU, leaving Chrome only the graphics.
+The goal of this toolkit is to move the video work of a Remotion export (decode, crop, framing, compositing) out of
+Chrome and onto the GPU, leaving Chrome only the graphics, while you keep writing videos in React exactly as today.
+NVENC alone is not that; Remotion already offers it.
 
-Today that works for one family of videos: footage with crop, position and zoom, plus graphics on top. Two things decide
-whether it becomes a general engine, and both need people outside Konecz: **compatibility** with richer compositions
-and **evidence on other GPUs**. See the [roadmap](#roadmap).
+Today that works for one family of videos: footage with crop, position and zoom, plus graphics on top. Two things would
+widen it, and both need people outside Konecz: **compatibility** with richer compositions and **evidence on other
+GPUs**. See the [roadmap](#roadmap).
 
 ## How it works
 

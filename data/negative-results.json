@@ -5,7 +5,7 @@
    "id": "vaapi-headless",
    "what": "Hardware decode (NVDEC through VA-API) inside headless Chrome",
    "result": "GPU process crashes when the decoded frame is handed to compositing; nvidia-smi dec stays at 0%.",
-   "why": "chrome-headless-shell is built without VA-API. Chrome for Testing with nvidia-vaapi-driver 0.0.18 opens the decoder (VideoDecoder.isConfigSupported true only with --gl=angle-egl), but headless Ozone has no native GPU memory buffer (dmabuf) to receive the frame: \"Could not find SharedImageBackingFactory ... MailboxVideoFrameConverter\". Chrome for Testing also lacks the shared-memory capture of Remotion's build.",
+   "why": "chrome-headless-shell is built without VA-API. Chrome for Testing with nvidia-vaapi-driver 0.0.18 opens the decoder (VideoDecoder.isConfigSupported true only with --gl=angle-egl), but the GPU process exits when the decoded frame goes to compositing (\"GPU process exited unexpectedly\"). Chrome for Testing also lacks the shared-memory capture of Remotion's build.",
    "measured": null
   },
   {
