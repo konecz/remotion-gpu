@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "remotion-gpu: exporting Remotion videos on the GPU"
+type: software
+authors:
+  - family-names: Lahr
+    given-names: Pedro Henrique
+    orcid: "https://orcid.org/0009-0001-2206-4852"
+    affiliation: Konecz
+license: MIT
+repository-code: "https://github.com/konecz/remotion-gpu"
+abstract: >-
+  A GPU rendering engine for Remotion: keep writing video in React, export on
+  the NVIDIA GPU with the CPU free. Layered NVDEC/libplacebo/NVENC pipeline,
+  open benchmark, paper and a Claude Code skill.
+keywords:
+  - Remotion
+  - video rendering
+  - GPU
+  - NVENC
+  - libplacebo
+  - ffmpeg
+  - headless Chrome

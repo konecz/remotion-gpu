@@ -1,6 +1,6 @@
 # Exporting Remotion videos on the GPU: a layered render, measured against Chrome
 
-**Konecz** · October 2026 · Remotion 4.0.536 · [Português](artigo.md)
+**Pedro Henrique Lahr** ([ORCID 0009-0001-2206-4852](https://orcid.org/0009-0001-2206-4852)) · Konecz · October 2026 · Remotion 4.0.536 · [Português](artigo.md)
 
 ## Abstract
 
