@@ -1,6 +1,6 @@
 # Exportar vídeos do Remotion na GPU: render em camadas, medido contra o Chrome
 
-**Konecz** · outubro de 2026 · Remotion 4.0.536 · [English](paper.md)
+**Pedro Henrique Lahr** ([ORCID 0009-0001-2206-4852](https://orcid.org/0009-0001-2206-4852)) · Konecz · outubro de 2026 · Remotion 4.0.536 · [English](paper.md)
 
 ## Resumo
 
